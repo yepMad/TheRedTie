@@ -12,7 +12,7 @@ public class Solid extends Entity
     private static TextureRegion tile = new TextureRegion(Assets.tileset,0,0,8,8);
     public Solid(int x, int y, int width, int height)
     {
-        super(new Vector2(x,y),new Rectangle(0,0,width,height),"solid");
+        super(new Vector2(x,y),new Rectangle(0,0,width,height),"solid",0);
         hitboxColor = Color.GREEN;
     }
 

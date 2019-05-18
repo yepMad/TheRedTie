@@ -12,7 +12,7 @@ public class Ladder extends Entity
 
     public Ladder(float x, float y)
     {
-        super(new Vector2(x,y), new Rectangle(0,0,8,8),"ladder");
+        super(new Vector2(x,y), new Rectangle(0,0,8,8),"ladder",0);
     }
 
     @Override

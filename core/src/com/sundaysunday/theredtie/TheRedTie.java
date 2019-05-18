@@ -37,7 +37,7 @@ public class TheRedTie extends ApplicationAdapter
 	public void render ()
 	{
 		camera.update();
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1); //Define o Background
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.setProjectionMatrix(camera.combined);
 		world.Update(Gdx.graphics.getDeltaTime());

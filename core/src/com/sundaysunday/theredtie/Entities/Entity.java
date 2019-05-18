@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.sundaysunday.theredtie.Worlds.World;
 
@@ -13,15 +14,26 @@ public class Entity
     protected Rectangle hitbox;
     protected float velocityX = 0, velocityY = 0;
     protected World world;
+    protected Polygon polygon;
     public Color hitboxColor = Color.YELLOW;
     private String nameTag;
 
 
-    public Entity(Vector2 position, Rectangle hitbox, String nameTag)
+    public Entity(Vector2 position, Rectangle hitbox, String nameTag, float rotation)
     {
         this.position = position;
         this.hitbox = hitbox;
         this.nameTag = nameTag;
+
+        //polygon = new Polygon(new float[]{hitbox.x,hitbox.y,hitbox.width,0,hitbox.width,hitbox.height,0,hitbox.height});
+        polygon = new Polygon(new float[] {
+                hitbox.x, hitbox.y,
+                hitbox.x, hitbox.y + hitbox.height,
+                hitbox.x + hitbox.width, hitbox.y + hitbox.height,
+                hitbox.x + hitbox.width, hitbox.y
+        });
+        polygon.setOrigin(hitbox.width/2, hitbox.height/2);
+        polygon.rotate(rotation);
     }
 
     public Entity()
@@ -33,8 +45,15 @@ public class Entity
 
     public void drawHitbox(ShapeRenderer renderer)
     {
+        renderer.end();
         renderer.setColor(hitboxColor);
-        renderer.rect(hitbox.x + position.x, hitbox.y + position.y, hitbox.width, hitbox.height);
+        renderer.begin(ShapeRenderer.ShapeType.Line);
+        renderer.polygon(polygon.getTransformedVertices());
+        //renderer.rect(hitbox.x + position.x, hitbox.y + position.y, hitbox.width, hitbox.height);
+        renderer.end();
+
+        /*renderer.setColor(hitboxColor);
+        renderer.rect(hitbox.x + position.x, hitbox.y + position.y, hitbox.width, hitbox.height);*/
     }
 
     public void update(float dt)

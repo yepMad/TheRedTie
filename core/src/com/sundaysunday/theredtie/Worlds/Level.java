@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-//import com.sundaysunday.theredtie.Entities.Jumpman;
+import com.sundaysunday.theredtie.Entities.Player;
 //import com.sundaysunday.theredtie.Entities.Kong;
 import com.sundaysunday.theredtie.Entities.*;
 //import com.sundaysunday.theredtie.Entities.Pauline;
@@ -13,7 +13,7 @@ import com.sundaysunday.theredtie.Entities.*;
 
 public class Level extends World
 {
-    //private Jumpman jumpman;
+    private Player player;
     //private ArrayList<Floor0> solids;
 
     public Level(OrthographicCamera camera)
@@ -160,13 +160,16 @@ public class Level extends World
 
         Floor0 floor4 = new Floor0(0,280,192,15);
         addEntity(floor4);
+
+        player = new Player(90,15);
+        addEntity(player);
     }
 
     @Override
     public void Update(float dt)
     {
         super.Update(dt);
-        if(Gdx.input.isKeyJustPressed(Keys.Q))
+        if(Gdx.input.isKeyJustPressed(Keys.K))
             shouldDrawHitbox = !shouldDrawHitbox;
     }
 
