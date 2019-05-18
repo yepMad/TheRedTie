@@ -7,6 +7,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.sundaysunday.theredtie.PlayerEnum;
@@ -30,7 +31,7 @@ public class Player extends Entity
 
     public Player(float x, float y)
     {
-        super(new Vector2(x,y),new Rectangle(4,0,9,11), "player", 0);
+        super(new Vector2(10,30), new Circle(0,30,10), "player");
         state = PlayerEnum.idle;
         m_xVelocity = 35;
         jumpForce = 900;
@@ -84,7 +85,7 @@ public class Player extends Entity
             }
         }
 
-        if(state == PlayerEnum.climbing)
+        /*if(state == PlayerEnum.climbing)
         {
             sign = 0;
             // Climb the ladder
@@ -100,15 +101,16 @@ public class Player extends Entity
                 state = PlayerEnum.idle;
             }
             velocityY = m_xVelocity * sign;
-        }
+        }*/
 
         // Vertical collision
         ArrayList<Entity> wallList = world.getEntitiesByTag("solid");
         for(Entity wall : wallList)
         {
-            if(collideWith(position.x, position.y+(velocityY*dt),wall))
+            if(collideWith(wall, this))
             {
-                if( (wall.getPosition().y + wall.getHitbox().y + wall.getHitbox().height) < (position.y + hitbox.y))
+                System.out.println("aa");
+                if((wall.getPosition().y + wall.getHitbox().y + wall.getHitbox().height) < (position.y + hitbox.y))
                 {
                     while(collideWith(position.x,position.y+Math.signum(velocityY),"solid") == null)
                         position.y += Math.signum(velocityY);
@@ -116,18 +118,23 @@ public class Player extends Entity
                     state = PlayerEnum.idle;
                     velocityY = 0;
                 }
+                state = PlayerEnum.idle;
+                velocityY = 0;
             }
         }
 
-        // Horizontal collision
+        //Horizontal collision
         for(Entity wall : wallList)
         {
-            if(collideWith(position.x+(velocityX*dt), position.y, wall))
-                if(position.x + hitbox.x + (hitbox.width/2) > wall.getX() && collideWith(position.x, position.y+1, "solid") == null)
+            if(collideWith(wall, this))
+                /*if(position.x + hitbox.x + (hitbox.width/2) > wall.getX() && collideWith(position.x, position.y+1, "solid") == null)
+                {*/
                     position.y++;
+
+                //}
         }
 
-        if(collideWith(position.x, position.y, "barrel") != null)
+        /*if(collideWith(position.x, position.y, "barrel") != null)
         {
             world.setResetFlag(true);
         }
@@ -135,11 +142,11 @@ public class Player extends Entity
         if(collideWith(position.x, position.y, "pauline") != null)
         {
             world.setResetFlag(true);
-        }
+        }*/
 
         // Snap to screen
-        if(position.x + hitbox.x < 0) position.x = -hitbox.x;
-        if(position.x + hitbox.x + hitbox.width > TheRedTie.WIDTH) position.x = TheRedTie.WIDTH - hitbox.width - hitbox.x;
+        /*if(position.x + hitbox.x < 0) position.x = -hitbox.x;
+        if(position.x + hitbox.x + hitbox.width > TheRedTie.WIDTH) position.x = TheRedTie.WIDTH - hitbox.width - hitbox.x;*/
 
     }
 

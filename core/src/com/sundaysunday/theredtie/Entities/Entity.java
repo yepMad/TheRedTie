@@ -3,18 +3,23 @@ package com.sundaysunday.theredtie.Entities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.*;
 import com.sundaysunday.theredtie.Worlds.World;
+import sun.security.ssl.Debug;
 
 public class Entity
 {
     protected Vector2 position;
-    protected Rectangle hitbox;
+
+    protected Rectangle hitbox; //Rectangle Hitbox
+    protected Polygon polygon; //Polygon Hitbox
+    protected Circle circle; //Circle Hitbox
+
+
     protected float velocityX = 0, velocityY = 0;
     protected World world;
-    protected Polygon polygon;
+
+
     public Color hitboxColor = Color.YELLOW;
     private String nameTag;
 
@@ -36,6 +41,13 @@ public class Entity
         polygon.rotate(rotation);
     }
 
+    public Entity(Vector2 position, Circle circle, String nameTag)
+    {
+        this.position = position;
+        this.circle = circle;
+        this.nameTag = nameTag;
+    }
+
     public Entity()
     {
         this.position = new Vector2(0,0) ;
@@ -46,10 +58,15 @@ public class Entity
     public void drawHitbox(ShapeRenderer renderer)
     {
         renderer.end();
-        renderer.setColor(hitboxColor);
+        renderer.setColor(Color.RED);
         renderer.begin(ShapeRenderer.ShapeType.Line);
-        renderer.polygon(polygon.getTransformedVertices());
-        //renderer.rect(hitbox.x + position.x, hitbox.y + position.y, hitbox.width, hitbox.height);
+        //renderer.rect(hitbox.x + position.x, hitbox.y + position.y, hitbox.width, hitbox.height); //Desenha retángulos
+        //renderer.setColor(hitboxColor);
+        //renderer.polygon(polygon.getTransformedVertices());
+        if(nameTag == "player")
+        {
+            renderer.circle(position.x, position.y, circle.radius);
+        }
         renderer.end();
 
         /*renderer.setColor(hitboxColor);
@@ -71,6 +88,26 @@ public class Entity
         return collideWithWhat.overlaps(new Rectangle(x + hitbox.x, y + hitbox.y, hitbox.width, hitbox.height));
     }
 
+    public boolean collideWith(Entity poly, Player cir) {
+
+        Polygon polygon = poly.getPoly();
+        Circle circle = cir.getCircle();
+
+        float []vertices = polygon.getTransformedVertices();
+        Vector2 center = new Vector2(cir.getX(), cir.getY());
+        float squareRadius=circle.radius*circle.radius;
+        for (int i=0;i<vertices.length;i+=2){
+            if (i==0){
+                if (Intersector.intersectSegmentCircle(new Vector2(vertices[vertices.length-2], vertices[vertices.length-1]), new Vector2(vertices[i], vertices[i+1]), center, squareRadius))
+                    return true;
+            } else {
+                if (Intersector.intersectSegmentCircle(new Vector2(vertices[i-2], vertices[i-1]), new Vector2(vertices[i], vertices[i+1]), center, squareRadius))
+                    return true;
+            }
+        }
+        return false;
+    }
+
     public Entity collideWith(float x, float y, String nameTag)
     {
         for(Entity entity : world.getEntitiesByTag(nameTag))
@@ -81,12 +118,12 @@ public class Entity
         return null;
     }
 
-    public void draw(Batch batch){}
+    public void         draw(Batch batch){}
 
-    public void keyUp(int keycode){}
-    public void keyDown(int keycode){}
+    public void         keyUp(int keycode){}
+    public void         keyDown(int keycode){}
 
-    public String getNameTag(){return nameTag;}
+    public String       getNameTag(){return nameTag;}
 
     public Vector2      getPosition(){return position;}
     public void         setPosition(Vector2 position){this.position = position;}
@@ -100,8 +137,14 @@ public class Entity
     public Rectangle 	getHitbox(){return hitbox;}
     public void			setHitbox(Rectangle hitbox){this.hitbox = hitbox;}
 
-    public float getVelocityX(){return velocityX;}
-    public float getVelocityY(){return velocityY;}
+    public Circle      getCircle(){System.out.println(circle); return circle;};
+
+    public Polygon getPoly() {
+        return new Polygon(polygon.getTransformedVertices());
+    }
+
+    public float        getVelocityX(){return velocityX;}
+    public float        getVelocityY(){return velocityY;}
 
     public void			setWorld(World world){this.world = world;}
 
