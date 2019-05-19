@@ -12,8 +12,7 @@ public class Floor3at1 extends Entity
     private static TextureRegion tile = new TextureRegion(Assets.floor3at1);
     public Floor3at1(int x, int y, int width, int height)
     {
-        super(new Vector2(x,y),new Rectangle(x+18,y-2,width,height),"solid",5);
-        hitboxColor = Color.GREEN;
+        super(new Vector2(x,y), x+18, y-2, width, height,"solid",5);
     }
 
     @Override

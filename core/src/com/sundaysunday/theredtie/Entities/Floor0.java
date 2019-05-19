@@ -13,8 +13,7 @@ public class Floor0 extends Entity
 
     public Floor0(int x, int y, int width, int height)
     {
-        super(new Vector2(x,y),new Rectangle(x,y,width,height),"solid",0);
-        hitboxColor = Color.GREEN;
+        super(new Vector2(x, y), x, y, width, height,"solid",0);
     }
 
     @Override

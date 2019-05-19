@@ -9,16 +9,15 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.sundaysunday.theredtie.Entities.Entity;
 
-@SuppressWarnings("ALL")
 public class World implements InputProcessor
 {
-    protected ArrayList<Entity> entities = new ArrayList<Entity>();
+    protected ArrayList<Entity> listEntities = new ArrayList<Entity>();
     protected OrthographicCamera camera;
     private ShapeRenderer shapeRenderer;
     public boolean shouldDrawHitbox = true;
     public boolean resetFlag = false;
 
-    private ArrayList<Entity> added = new ArrayList<Entity>();
+    private ArrayList<Entity> listAddedEntities = new ArrayList<Entity>();
 
     public World(OrthographicCamera camera)
     {
@@ -27,22 +26,26 @@ public class World implements InputProcessor
         shapeRenderer.setAutoShapeType(true);
     }
 
-    public void Update(float dt)
+    public void Update(float deltaTime)
     {
-        for(Entity e : entities)
+        for(Entity m_Entity : listEntities)
         {
-            if(e != null)
-                e.update(dt);
+            if(m_Entity != null)
+            {
+                m_Entity.Update(deltaTime);
+            }
         }
     }
 
     public void draw(Batch batch)
     {
         batch.begin();
-        for(Entity e : entities)
+        for(Entity m_Entity : listEntities)
         {
-            if(e != null)
-                e.draw(batch);
+            if(m_Entity != null)
+            {
+                m_Entity.draw(batch);
+            }
         }
         batch.end();
     }
@@ -53,48 +56,48 @@ public class World implements InputProcessor
         {
             shapeRenderer.setProjectionMatrix(camera.combined);
             shapeRenderer.begin(ShapeType.Line);
-            for(Entity e : entities)
+            for(Entity m_Entity : listEntities)
             {
-                if(e != null)
-                    e.drawHitbox(shapeRenderer);
+                if(m_Entity != null)
+                    m_Entity.drawHitbox(shapeRenderer);
             }
             shapeRenderer.end();
         }
     }
 
-    public Entity addEntity(Entity e)
+    public Entity addEntity(Entity m_Entity)
     {
-        e.setWorld(this);
-        added.add(e);
-        return e;
+        m_Entity.setWorld(this);
+        listAddedEntities.add(m_Entity);
+        return m_Entity;
+    }
+
+    public Entity removeEntity(Entity m_Entity)
+    {
+        listEntities.remove(m_Entity);
+        return m_Entity;
     }
 
     public void updateList()
     {
-        for(Entity e : added)
+        for(Entity m_Entity : listAddedEntities)
         {
-            entities.add(e);
+            listEntities.add(m_Entity);
         }
-        added.clear();
+        listAddedEntities.clear();
     }
 
-    public Entity removeEntity(Entity e)
+    public ArrayList<Entity> getEntitiesByTag(String nameTag)
     {
-        entities.remove(e);
-        return e;
-    }
+        ArrayList<Entity> listEntity = new ArrayList<Entity>();
 
-    public ArrayList<Entity> getEntitiesByTag(String tag)
-    {
-        ArrayList<Entity> list = new ArrayList<Entity>();
-
-        for(Entity e : entities)
+        for(Entity m_Entity : listEntities)
         {
-            if(e.getNameTag() == tag)
-                list.add(e);
+            if(m_Entity.getNameTag() == nameTag)
+                listEntity.add(m_Entity);
         }
 
-        return list;
+        return listEntity;
     }
 
     public boolean getResetFlag()
@@ -102,30 +105,34 @@ public class World implements InputProcessor
         return resetFlag;
     }
 
-    public void setResetFlag(boolean reset)
+    public void setResetFlag(boolean bReset)
     {
-        resetFlag = reset;
+        resetFlag = bReset;
     }
 
     @Override
-    public boolean keyDown(int keycode)
+    public boolean keyDown(int iKeycode)
     {
-        for(Entity e : entities)
+        for(Entity m_Entity : listEntities)
         {
-            if(e != null)
-                e.keyDown(keycode);
+            if(m_Entity != null)
+            {
+                m_Entity.keyDown(iKeycode);
+            }
         }
+
         return false;
     }
 
     @Override
-    public boolean keyUp(int keycode)
+    public boolean keyUp(int iKeycode)
     {
-        for(Entity e : entities)
+        for(Entity m_Entity : listEntities)
         {
-            if(e != null)
-                e.keyUp(keycode);
+            if(m_Entity != null)
+                m_Entity.keyUp(iKeycode);
         }
+
         return false;
     }
 

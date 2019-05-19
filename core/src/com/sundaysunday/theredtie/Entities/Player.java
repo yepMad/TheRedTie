@@ -31,7 +31,7 @@ public class Player extends Entity
 
     public Player(float x, float y)
     {
-        super(new Vector2(10,30), new Circle(0,30,10), "player");
+        super(new Vector2(10,30), new Circle(0,0,5), "player");
         state = PlayerEnum.idle;
         m_xVelocity = 35;
         jumpForce = 900;
@@ -48,10 +48,10 @@ public class Player extends Entity
     }
 
     @Override
-    public void update(float dt)
+    public void Update(float deltaTime)
     {
-        super.update(dt);
-        elapsed += dt;
+        super.Update(deltaTime);
+        elapsed += deltaTime;
 
         if(velocityX > 0)flip = true;
         if(velocityX < 0)flip = false;
@@ -74,7 +74,7 @@ public class Player extends Entity
             velocityX = m_xVelocity * sign;
 
             // Climb the ladder
-            if(collideWith(position.x,position.y,"ladder") != null)
+            /*if(collideWith(position.x,position.y,"ladder") != null)
             {
                 if(Gdx.input.isKeyJustPressed(Keys.UP))
                 {
@@ -82,7 +82,7 @@ public class Player extends Entity
                     velocityX=0;
                     velocityX=0;
                 }
-            }
+            }*/
         }
 
         /*if(state == PlayerEnum.climbing)
@@ -104,34 +104,36 @@ public class Player extends Entity
         }*/
 
         // Vertical collision
-        ArrayList<Entity> wallList = world.getEntitiesByTag("solid");
-        for(Entity wall : wallList)
+        ArrayList<Entity> listWall = world.getEntitiesByTag("solid");
+        for(Entity wall : listWall)
         {
-            if(collideWith(wall, this))
+            if(bCollideWith(wall, this))
             {
-                System.out.println("aa");
-                if((wall.getPosition().y + wall.getHitbox().y + wall.getHitbox().height) < (position.y + hitbox.y))
-                {
-                    while(collideWith(position.x,position.y+Math.signum(velocityY),"solid") == null)
+                //if((wall.getPosition().y + wall.getHitbox().y + wall.getHitbox().height) < (position.y + circle.y))
+                //{
+                    while(bCollideWith("solid", this) == null)
+                    {
                         position.y += Math.signum(velocityY);
+                    }
 
                     state = PlayerEnum.idle;
                     velocityY = 0;
-                }
+                //}
                 state = PlayerEnum.idle;
                 velocityY = 0;
             }
         }
 
         //Horizontal collision
-        for(Entity wall : wallList)
+        for(Entity wall : listWall)
         {
-            if(collideWith(wall, this))
-                /*if(position.x + hitbox.x + (hitbox.width/2) > wall.getX() && collideWith(position.x, position.y+1, "solid") == null)
-                {*/
+            if(bCollideWith(wall, this))
+            {
+                if(position.x + circleHitbox.x + (circleHitbox.radius/2) > wall.getPositionX() && bCollideWith("solid", this) == null)
+                {
                     position.y++;
-
-                //}
+                }
+            }
         }
 
         /*if(collideWith(position.x, position.y, "barrel") != null)
@@ -144,10 +146,9 @@ public class Player extends Entity
             world.setResetFlag(true);
         }*/
 
-        // Snap to screen
-        /*if(position.x + hitbox.x < 0) position.x = -hitbox.x;
-        if(position.x + hitbox.x + hitbox.width > TheRedTie.WIDTH) position.x = TheRedTie.WIDTH - hitbox.width - hitbox.x;*/
-
+        //Impede que o player saia da tela, são as bordas da tela / Prevents the player from leave the screen, are the edges of the screen
+        if(position.x + circleHitbox.x < 0) position.x = -circleHitbox.x;
+        if(position.x + circleHitbox.x + circleHitbox.radius > TheRedTie.WIDTH) position.x = TheRedTie.WIDTH - circleHitbox.radius - circleHitbox.x;
     }
 
     @Override
@@ -155,23 +156,31 @@ public class Player extends Entity
     {
         if(state == PlayerEnum.idle)
         {
-            // If he's moving
             if(velocityX != 0)
+            {
                 drawPlayer(batch, walkAnimation.getKeyFrame(elapsed,true));
+            }
             else
+            {
                 drawPlayer(batch, standing);
+            }
         }
+
         if(state == PlayerEnum.jumping)
         {
             drawPlayer(batch, jumpingAnimation);
         }
+
         if(state == PlayerEnum.climbing)
         {
-            // If he's moving
             if(velocityY != 0)
+            {
                 drawPlayer(batch, climbingAnimation.getKeyFrame(elapsed,true));
+            }
             else
+            {
                 drawPlayer(batch, climbingAnimation.getKeyFrames()[0]);
+            }
         }
     }
 
@@ -201,9 +210,13 @@ public class Player extends Entity
         if(state == PlayerEnum.idle)
         {
             if(keycode == Keys.D)
+            {
                 velocityX = 0;
+            }
             if(keycode == Keys.A)
+            {
                 velocityX = 0;
+            }
         }
     }
 
@@ -213,11 +226,17 @@ public class Player extends Entity
         if(state == PlayerEnum.idle)
         {
             if(keycode == Keys.D)
+            {
                 velocityX = m_xVelocity;
+            }
             if(keycode == Keys.A)
+            {
                 velocityX = -m_xVelocity;
+            }
             if(keycode == Keys.SPACE)
+            {
                 jump();
+            }
         }
 
     }
