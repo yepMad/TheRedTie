@@ -31,7 +31,7 @@ public class Player extends Entity
 
     public Player(float x, float y)
     {
-        super(new Vector2(10,30), new Circle(0,0,5), "player");
+        super(new Vector2(0,30), new Circle(0,30,5), "player");
         state = PlayerEnum.idle;
         m_xVelocity = 35;
         jumpForce = 900;
@@ -187,7 +187,7 @@ public class Player extends Entity
     private void drawPlayer(Batch batch, TextureRegion graphic)
     {
         batch.draw(graphic,
-                position.x,
+                position.x-7,
                 position.y,
                 8,
                 8,
