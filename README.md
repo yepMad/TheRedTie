@@ -5,4 +5,4 @@
 - A maioria das variáveis e funções estão nomeadas com a convenção da [notação Húngara](https://en.wikipedia.org/wiki/Hungarian_notation "notação Húngara")
 - Código em: core -> src -> com.sundaysunday.theredtie
 
-#ATENÇÃO: o projeto ainda está em desenvolvimento.
+## ATENÇÃO: o projeto ainda está em desenvolvimento.
