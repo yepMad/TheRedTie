@@ -71,6 +71,7 @@ public class Player extends Entity
                 sign--;
             if(Gdx.input.isKeyPressed(Keys.SPACE))
                 jump();
+
             velocityX = m_xVelocity * sign;
 
             // Climb the ladder
@@ -83,6 +84,7 @@ public class Player extends Entity
                     velocityX=0;
                 }
             }*/
+            position.y += 0.1;
         }
 
         /*if(state == PlayerEnum.climbing)
