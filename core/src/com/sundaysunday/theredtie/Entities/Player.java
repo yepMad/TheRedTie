@@ -21,13 +21,14 @@ public class Player extends Entity
     private float jumpForce;
     private float gravity;
     private float maxYVel;
-    private boolean flip;
-
     private float elapsed = 0;
+
+    private boolean flip;
     private Animation<TextureRegion> walkAnimation;
     private Animation<TextureRegion> climbingAnimation;
     private TextureRegion jumpingAnimation = new TextureRegion(Assets.tileset,24,0,16,16);
     private TextureRegion standing = new TextureRegion(Assets.tileset,8,0,16,16);
+    private boolean running = false;
 
     public Player(float x, float y)
     {
@@ -60,67 +61,79 @@ public class Player extends Entity
 
         if(velocityY > maxYVel) velocityY = maxYVel;
         if(velocityY < -maxYVel) velocityY = -maxYVel;
+        if(running) position.y += 0.1;
 
-        int sign = 0;
+        int ySign = 0;
+        int xSign = 0;
 
         if(state == PlayerEnum.idle)
         {
             if(Gdx.input.isKeyPressed(Keys.D))
-                sign++;
-            if(Gdx.input.isKeyPressed(Keys.A))
-                sign--;
-            if(Gdx.input.isKeyPressed(Keys.SPACE))
-                jump();
-
-            velocityX = m_xVelocity * sign;
-
-            // Climb the ladder
-            /*if(collideWith(position.x,position.y,"ladder") != null)
             {
-                if(Gdx.input.isKeyJustPressed(Keys.UP))
+                xSign++;
+                running = true;
+            }
+
+            if(Gdx.input.isKeyPressed(Keys.A))
+            {
+                xSign--;
+                running = true;
+            }
+
+            if(Gdx.input.isKeyPressed(Keys.SPACE))
+            {
+                jump();
+            }
+
+            if(!Gdx.input.isKeyPressed(Keys.D) && !Gdx.input.isKeyPressed(Keys.A))
+            {
+                running = false;
+            }
+
+            velocityX = m_xVelocity * xSign;
+
+            if(bCollideWith("ladder", this) != null)
+            {
+                if(Gdx.input.isKeyJustPressed(Keys.W))
                 {
                     state = PlayerEnum.climbing;
-                    velocityX=0;
-                    velocityX=0;
                 }
-            }*/
-            position.y += 0.1;
+            }
         }
 
-        /*if(state == PlayerEnum.climbing)
+        if(state == PlayerEnum.climbing)
         {
-            sign = 0;
-            // Climb the ladder
-            if(collideWith(position.x,position.y,"ladder") != null || collideWith(position.x, position.y,"solid") != null)
+            if((bCollideWith("ladder", this)) != null)
             {
-                if(Gdx.input.isKeyPressed(Keys.UP))
-                    sign += 1;
-                if(Gdx.input.isKeyPressed(Keys.DOWN))
-                    sign -= 1;
+                ySign = moveY();
+                xSign = moveX();
             }
             else
             {
                 state = PlayerEnum.idle;
             }
-            velocityY = m_xVelocity * sign;
-        }*/
 
-        // Vertical collision
+            velocityY = m_xVelocity * ySign;
+            velocityX = m_xVelocity/3 * xSign;
+        }
+
+        if(state == PlayerEnum.jumping)
+        {
+            xSign = moveX();
+
+            velocityX = m_xVelocity * xSign;
+        }
+
         ArrayList<Entity> listWall = world.getEntitiesByTag("solid");
         for(Entity wall : listWall)
         {
-            if(bCollideWith(wall, this))
+            if(tbCollideWith(wall, this, velocityY, deltaTime))
             {
-                //if((wall.getPosition().y + wall.getHitbox().y + wall.getHitbox().height) < (position.y + circle.y))
-                //{
-                    while(bCollideWith("solid", this) == null)
-                    {
-                        position.y += Math.signum(velocityY);
-                    }
+                while(bCollideWith("solid", this) == null)
+                {
+                    position.y += Math.signum(velocityY);
+                }
 
-                    state = PlayerEnum.idle;
-                    velocityY = 0;
-                //}
                 state = PlayerEnum.idle;
                 velocityY = 0;
             }
@@ -129,7 +142,7 @@ public class Player extends Entity
         //Horizontal collision
         for(Entity wall : listWall)
         {
-            if(bCollideWith(wall, this))
+            if(tbCollideWith(wall, this, velocityY, deltaTime))
             {
                 if(position.x + circleHitbox.x + (circleHitbox.radius/2) > wall.getPositionX() && bCollideWith("solid", this) == null)
                 {
@@ -138,19 +151,36 @@ public class Player extends Entity
             }
         }
 
-        /*if(collideWith(position.x, position.y, "barrel") != null)
-        {
-            world.setResetFlag(true);
-        }
-
-        if(collideWith(position.x, position.y, "pauline") != null)
-        {
-            world.setResetFlag(true);
-        }*/
-
         //Impede que o player saia da tela, são as bordas da tela / Prevents the player from leave the screen, are the edges of the screen
         if(position.x + circleHitbox.x < 0) position.x = -circleHitbox.x;
         if(position.x + circleHitbox.x + circleHitbox.radius > TheRedTie.WIDTH) position.x = TheRedTie.WIDTH - circleHitbox.radius - circleHitbox.x;
+    }
+
+
+    private int moveX()
+    {
+        if(Gdx.input.isKeyPressed(Keys.D))
+        {
+            return 1;
+        }
+        if(Gdx.input.isKeyPressed(Keys.A))
+        {
+            return -1;
+        }
+        return 0;
+    }
+
+    private int moveY()
+    {
+        if(Gdx.input.isKeyPressed(Keys.W))
+        {
+            return 1;
+        }
+        if(Gdx.input.isKeyPressed(Keys.S))
+        {
+            return -1;
+        }
+        return 0;
     }
 
     @Override

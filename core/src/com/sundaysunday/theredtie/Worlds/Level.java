@@ -35,6 +35,15 @@ public class Level extends World
         Floor0 floor4 = new Floor0(0,280,192,15);
         addEntity(floor4);
 
+        Ladder ladder = new Ladder(7, 17, 10, 60);
+        addEntity(ladder);
+
+        LadderBoxOnly ladderBoxOnly_0 = new LadderBoxOnly(17,17,10,60);
+        addEntity(ladderBoxOnly_0);
+
+        LadderBoxOnly ladderBoxOnly_1 = new LadderBoxOnly(27,17,10,60);
+        addEntity(ladderBoxOnly_1);
+
         player = new Player(10,30);
         addEntity(player);
     }
