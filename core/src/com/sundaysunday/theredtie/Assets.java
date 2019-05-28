@@ -6,12 +6,19 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public abstract class Assets
 {
-    public static final Texture floor0 = new Texture(Gdx.files.internal("floor0.png"));
-    public static final Texture floor1 = new Texture(Gdx.files.internal("floor1.png"));
-    public static final Texture floor2at0 = new Texture(Gdx.files.internal("floor2at0.png"));
-    public static final Texture floor2at1 = new Texture(Gdx.files.internal("floor2at1.png"));
-    public static final Texture floor3at1 = new Texture(Gdx.files.internal("floor3at1.png"));
+    //FLOORS
+    public static TextureRegion floor0 = new TextureRegion(new Texture(Gdx.files.internal("floor0.png")));
+    public static TextureRegion floor1 = new TextureRegion(new Texture(Gdx.files.internal("floor1.png")));
+    public static TextureRegion floor2at0 = new TextureRegion(new Texture(Gdx.files.internal("floor2at0.png")));
+    public static TextureRegion floor2at1 = new TextureRegion(new Texture(Gdx.files.internal("floor2at1.png")));
+    public static TextureRegion floor3at0 = new TextureRegion(new Texture(Gdx.files.internal("floor2at1.png")));
+    public static TextureRegion floor3at1 = new TextureRegion(new Texture(Gdx.files.internal("floor3at1.png")));
+    public static TextureRegion floor4at0 = new TextureRegion(new Texture(Gdx.files.internal("floor4at0.png")));
+    public static TextureRegion floor4at1 = new TextureRegion(new Texture(Gdx.files.internal("floor4at1.png")));
+
+    //LADDER
     public static final Texture ladder = new Texture(Gdx.files.internal("ladder.png"));
 
+    //TILESET TEMPORARY
     public static final Texture tileset = new Texture(Gdx.files.internal("tileset.png"));
 }

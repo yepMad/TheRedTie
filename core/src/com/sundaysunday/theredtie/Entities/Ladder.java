@@ -14,7 +14,7 @@ public class Ladder extends Entity
     }
 
     @Override
-    public void draw(Batch batch)
+    public void Draw(Batch batch)
     {
         batch.draw(tile, position.x, position.y,0, 0,30,60,1,1,0);
     }

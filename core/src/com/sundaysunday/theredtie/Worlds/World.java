@@ -13,8 +13,8 @@ public class World implements InputProcessor
 {
     protected ArrayList<Entity> listEntities = new ArrayList<Entity>();
     protected OrthographicCamera camera;
-    private ShapeRenderer shapeRenderer;
-    public boolean shouldDrawHitbox = true;
+    private ShapeRenderer m_shapeRenderer;
+    public boolean bShouldDrawHitbox = true;
     public boolean resetFlag = false;
 
     private ArrayList<Entity> listAddedEntities = new ArrayList<Entity>();
@@ -22,8 +22,8 @@ public class World implements InputProcessor
     public World(OrthographicCamera camera)
     {
         this.camera = camera;
-        shapeRenderer = new ShapeRenderer();
-        shapeRenderer.setAutoShapeType(true);
+        m_shapeRenderer = new ShapeRenderer();
+        m_shapeRenderer.setAutoShapeType(true);
     }
 
     public void Update(float deltaTime)
@@ -37,52 +37,54 @@ public class World implements InputProcessor
         }
     }
 
-    public void draw(Batch batch)
+    public void Draw(Batch batch)
     {
         batch.begin();
-        for(Entity m_Entity : listEntities)
+        for(Entity entity : listEntities)
         {
-            if(m_Entity != null)
+            if(entity != null)
             {
-                m_Entity.draw(batch);
+                entity.Draw(batch);
             }
         }
         batch.end();
     }
 
-    public void drawHitbox()
+    public void DrawHitbox()
     {
-        if(shouldDrawHitbox)
+        if(bShouldDrawHitbox)
         {
-            shapeRenderer.setProjectionMatrix(camera.combined);
-            shapeRenderer.begin(ShapeType.Line);
-            for(Entity m_Entity : listEntities)
+            m_shapeRenderer.setProjectionMatrix(camera.combined);
+            m_shapeRenderer.begin(ShapeType.Line);
+            for(Entity entity : listEntities)
             {
-                if(m_Entity != null)
-                    m_Entity.drawHitbox(shapeRenderer);
+                if(entity != null)
+                {
+                    entity.DrawHitbox(m_shapeRenderer);
+                }
             }
-            shapeRenderer.end();
+            m_shapeRenderer.end();
         }
     }
 
-    public Entity addEntity(Entity m_Entity)
+    public Entity AddEntity(Entity entity)
     {
-        m_Entity.setWorld(this);
-        listAddedEntities.add(m_Entity);
-        return m_Entity;
+        entity.setWorld(this);
+        listAddedEntities.add(entity);
+        return entity;
     }
 
-    public Entity removeEntity(Entity m_Entity)
+    public Entity RemoveEntity(Entity m_Entity)
     {
         listEntities.remove(m_Entity);
         return m_Entity;
     }
 
-    public void updateList()
+    public void UpdateList()
     {
-        for(Entity m_Entity : listAddedEntities)
+        for(Entity entity : listAddedEntities)
         {
-            listEntities.add(m_Entity);
+            listEntities.add(entity);
         }
         listAddedEntities.clear();
     }
@@ -91,10 +93,10 @@ public class World implements InputProcessor
     {
         ArrayList<Entity> listEntity = new ArrayList<Entity>();
 
-        for(Entity m_Entity : listEntities)
+        for(Entity entity : listEntities)
         {
-            if(m_Entity.getNameTag() == nameTag)
-                listEntity.add(m_Entity);
+            if(entity.getM_nameTag() == nameTag)
+                listEntity.add(entity);
         }
 
         return listEntity;
@@ -117,7 +119,7 @@ public class World implements InputProcessor
         {
             if(m_Entity != null)
             {
-                m_Entity.keyDown(iKeycode);
+                m_Entity.KeyDown(iKeycode);
             }
         }
 
@@ -127,10 +129,10 @@ public class World implements InputProcessor
     @Override
     public boolean keyUp(int iKeycode)
     {
-        for(Entity m_Entity : listEntities)
+        for(Entity entity : listEntities)
         {
-            if(m_Entity != null)
-                m_Entity.keyUp(iKeycode);
+            if(entity != null)
+                entity.KeyUp(iKeycode);
         }
 
         return false;
