@@ -39,7 +39,7 @@ public class Player extends Entity
         m_state = PlayerEnum.idle;
 
         m_xVelocity = 35;
-        m_jumpForce = 900;
+        m_jumpForce = 200;
         m_gravity = 10;
         m_maxVelY = 300;
 
@@ -57,10 +57,13 @@ public class Player extends Entity
     public void Update(float deltaTime)
     {
         super.Update(deltaTime);
+
+        circleHitbox.setX(position.x);
+        circleHitbox.setY(position.y);
+
         m_elapsed += deltaTime;
 
-        if(velocityX > 0) { bFlip = true; }
-        if(velocityX < 0) { bFlip = false; }
+        Flip();
 
         velocityY -= m_gravity;
 
@@ -85,7 +88,7 @@ public class Player extends Entity
             }
             if(Gdx.input.isKeyPressed(Keys.SPACE))
             {
-                jump();
+                Jump();
             }
             if(!Gdx.input.isKeyPressed(Keys.D) && !Gdx.input.isKeyPressed(Keys.A))
             {
@@ -94,7 +97,7 @@ public class Player extends Entity
 
             velocityX = m_xVelocity * xSum;
 
-            if(CollideWithByNameTag("ladder", this) != null)
+            if(CollideWithNameTagAndEntity("ladder", this) != null)
             {
                 if(Gdx.input.isKeyJustPressed(Keys.W))
                 {
@@ -105,7 +108,7 @@ public class Player extends Entity
 
         if(m_state == PlayerEnum.climbing)
         {
-            if((CollideWithByNameTag("ladder", this)) != null)
+            if((CollideWithNameTagAndEntity("ladder", this)) != null)
             {
                 ySum = MoveY();
                 xSum = MoveX();
@@ -130,9 +133,9 @@ public class Player extends Entity
 
         for(Entity wall : listWall)
         {
-            if(CollideWithInBetweenPolygonAndCircle(wall, this, velocityY, deltaTime))
+            if(CollideWithInBetweenPOLYGONandCIRCLE(wall, this, velocityY, deltaTime))
             {
-                while(CollideWithByNameTag("solid", this) == null)
+                while(CollideWithNameTagAndEntity("solid", this) == null)
                 {
                     position.y += Math.signum(velocityY);
                 }
@@ -144,19 +147,38 @@ public class Player extends Entity
 
         for(Entity wall : listWall)
         {
-            if(CollideWithInBetweenPolygonAndCircle(wall, this, velocityY, deltaTime))
+            if(CollideWithInBetweenPOLYGONandCIRCLE(wall, this, velocityY, deltaTime))
             {
-                if(position.x + circleHitbox.x + (circleHitbox.radius/2) > wall.getPositionX() && CollideWithByNameTag("solid", this) == null)
+                if(position.x + circleHitbox.x + (circleHitbox.radius/2) > wall.getPositionX() && CollideWithNameTagAndEntity("solid", this) == null)
                 {
                     position.y++;
                 }
             }
         }
 
-        if(position.x + circleHitbox.x < 0) { position.x = -circleHitbox.x; }
-        if(position.x + circleHitbox.x + circleHitbox.radius > TheRedTie.WIDTH) { position.x = TheRedTie.WIDTH - circleHitbox.radius - circleHitbox.x; }
+        IfPlayerCollideWithBall();
+        PreventsPlayerExitTheScreen();
     }
 
+    private void IfPlayerCollideWithBall()
+    {
+        if(CollideWithDemolitionBallTagAndPlayerCircle("demolitionBall", this) != null)
+        {
+            world.setResetFlag(true);
+        }
+    }
+
+    private void PreventsPlayerExitTheScreen()
+    {
+        if(position.x + circleHitbox.x < 0) { position.x = -circleHitbox.x; }
+        if(circleHitbox.x + circleHitbox.radius > TheRedTie.WIDTH) { position.x += TheRedTie.WIDTH - circleHitbox.radius - circleHitbox.x; }
+    }
+
+    private void Flip()
+    {
+        if(velocityX > 0) { bFlip = true; }
+        if(velocityX < 0) { bFlip = false; }
+    }
 
     private int MoveX()
     {
@@ -182,6 +204,12 @@ public class Player extends Entity
             return -1;
         }
         return 0;
+    }
+
+    public void Jump()
+    {
+        velocityY = m_jumpForce;
+        m_state = PlayerEnum.jumping;
     }
 
     @Override
@@ -221,7 +249,7 @@ public class Player extends Entity
     {
         batch.draw(graphic,
                 position.x-7,
-                position.y,
+                position.y - 3,
                 8,
                 8,
                 16,
@@ -229,12 +257,6 @@ public class Player extends Entity
                 bFlip ? -1 : 1,
                 1,
                 0);
-    }
-
-    public void jump()
-    {
-        velocityY = m_jumpForce;
-        m_state = PlayerEnum.jumping;
     }
 
     @Override
@@ -268,7 +290,7 @@ public class Player extends Entity
             }
             if(keycode == Keys.SPACE)
             {
-                jump();
+                Jump();
             }
         }
 

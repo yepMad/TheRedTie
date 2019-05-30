@@ -95,7 +95,7 @@ public class World implements InputProcessor
 
         for(Entity entity : listEntities)
         {
-            if(entity.getM_nameTag() == nameTag)
+            if(entity.getNameTag() == nameTag)
                 listEntity.add(entity);
         }
 

@@ -24,9 +24,9 @@ public class Floors extends Entity
             Assets.floor4at1
             };
 
-    public Floors(int positionX, int positionY, int colliderPositionX, int colliderPositionY, int width, int height, int rotation, int whatsTheFloor)
+    public Floors(int positionX, int positionY, int offsetColliderX, int offsetColliderY, int width, int height, int rotation, int whatsTheFloor)
     {
-        super(new Vector2(positionX, positionY), colliderPositionX, colliderPositionY, width, height,"solid", rotation);
+        super(new Vector2(positionX, positionY), (positionX + offsetColliderX), (positionY + offsetColliderY), width, height,"solid", rotation);
 
         m_whatsTheFloor = whatsTheFloor;
         m_width = width;

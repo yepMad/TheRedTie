@@ -49,9 +49,11 @@ public class Entity
     public void DrawHitbox(ShapeRenderer renderer)
     {
         renderer.end();
+
         renderer.setColor(Color.GREEN);
         renderer.begin(ShapeRenderer.ShapeType.Line);
-        if(m_nameTag == "player" || m_nameTag == "barrel")
+
+        if(m_nameTag.equals("player") || m_nameTag.equals("demolitionBall"))
         {
             renderer.circle(position.x, position.y, circleHitbox.radius);
         }
@@ -59,10 +61,11 @@ public class Entity
         {
             renderer.polygon(polygonHitbox.getTransformedVertices());
         }
+
         renderer.end();
     }
 
-    public boolean CollideWithByNameTag(Entity m_polygon, Player m_circle)
+    public boolean CollideWithInBetweenPOLYGONandCIRCLE(Entity m_polygon, Entity m_circle)
     {
         Polygon polygon = m_polygon.getPolygonHitbox();
         Circle circle = m_circle.getCircleHitbox();
@@ -93,13 +96,13 @@ public class Entity
         return false;
     }
 
-    public boolean CollideWithByNameTag(Entity m_polygon, Barrel m_circle) {
+    public boolean CollideWithInBetweenPOLYGONandCIRCLE(Entity m_polygon, Entity m_circle, float velocityY, float deltaTime) {
 
         Polygon polygon = m_polygon.getPolygonHitbox();
         Circle circle = m_circle.getCircleHitbox();
 
         float[] vertices = polygon.getTransformedVertices();
-        Vector2 center = new Vector2(m_circle.getPositionX(), m_circle.getPositionY());
+        Vector2 center = new Vector2(m_circle.getPositionX(), (m_circle.getPositionY()+(velocityY * deltaTime)));
 
         float squareRadius = circle.radius * circle.radius;
 
@@ -124,73 +127,24 @@ public class Entity
         return false;
     }
 
-    public boolean CollideWithInBetweenPolygonAndCircle(Entity m_polygon, Player m_circle, float velocityY, float dt) {
+    public boolean CollideBetweenCIRCLEandCIRCLE(Entity firstCircle, Entity secondCircle) {
 
-        Polygon polygon = m_polygon.getPolygonHitbox();
-        Circle circle = m_circle.getCircleHitbox();
+        Circle circleOne = firstCircle.getCircleHitbox();
+        Circle circleTwo = secondCircle.getCircleHitbox();
 
-        float[] vertices = polygon.getTransformedVertices();
-        Vector2 center = new Vector2(m_circle.getPositionX(), (m_circle.getPositionY()+(velocityY * dt)));
-
-        float squareRadius = circle.radius * circle.radius;
-
-        for (int i = 0; i < vertices.length; i += 2)
+        if(circleOne.overlaps(circleTwo))
         {
-            if (i == 0)
-            {
-                if (Intersector.intersectSegmentCircle(new Vector2(vertices[vertices.length-2], vertices[vertices.length-1]), new Vector2(vertices[i], vertices[i+1]), center, squareRadius))
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                if (Intersector.intersectSegmentCircle(new Vector2(vertices[i-2], vertices[i-1]), new Vector2(vertices[i], vertices[i+1]), center, squareRadius))
-                {
-                    return true;
-                }
-            }
+            return true;
         }
 
         return false;
     }
 
-    public boolean CollideWithInBetweenPolygonAndCircle(Entity m_polygon, Barrel m_circle, float velocityY, float dt) {
-
-        Polygon polygon = m_polygon.getPolygonHitbox();
-        Circle circle = m_circle.getCircleHitbox();
-
-        float[] vertices = polygon.getTransformedVertices();
-        Vector2 center = new Vector2(m_circle.getPositionX(), (m_circle.getPositionY()+(velocityY * dt)));
-
-        float squareRadius = circle.radius * circle.radius;
-
-        for (int i = 0; i < vertices.length; i += 2)
-        {
-            if (i == 0)
-            {
-                if (Intersector.intersectSegmentCircle(new Vector2(vertices[vertices.length-2], vertices[vertices.length-1]), new Vector2(vertices[i], vertices[i+1]), center, squareRadius))
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                if (Intersector.intersectSegmentCircle(new Vector2(vertices[i-2], vertices[i-1]), new Vector2(vertices[i], vertices[i+1]), center, squareRadius))
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public Entity CollideWithByNameTag(String nameTag, Player m_circle)
+    public Entity CollideWithNameTagAndEntity(String nameTag, Entity m_circle)
     {
         for(Entity entity : world.getEntitiesByTag(nameTag))
         {
-            if(CollideWithByNameTag(entity, m_circle))
+            if(CollideWithInBetweenPOLYGONandCIRCLE(entity, m_circle))
             {
                 return entity;
             }
@@ -199,11 +153,11 @@ public class Entity
         return null;
     }
 
-    public Entity CollideWithByNameTag(String nameTag, Barrel m_circle)
+    public Entity CollideWithDemolitionBallTagAndPlayerCircle(String nameTag, Player m_circle)
     {
         for(Entity entity : world.getEntitiesByTag(nameTag))
         {
-            if(CollideWithByNameTag(entity, m_circle))
+            if(CollideBetweenCIRCLEandCIRCLE(entity, m_circle))
             {
                 return entity;
             }
@@ -217,25 +171,25 @@ public class Entity
     public void         KeyUp(int keycode){}
     public void         KeyDown(int keycode){}
 
-    public String getM_nameTag(){return m_nameTag;}
+    public String       getNameTag(){return m_nameTag;}
 
     public Vector2      getPosition(){return position;}
     public void         setPosition(Vector2 position){this.position = position;}
 
     public float		getPositionX(){return position.x;}
-    public void setVelocityX(float velocityX){this.velocityX = velocityX;}
+    public void         setVelocityX(float velocityX){this.velocityX = velocityX;}
 
     public float		getPositionY(){return position.y;}
-    public void setVelocityY(float velocityY){this.velocityY = velocityY;}
+    public void         setVelocityY(float velocityY){this.velocityY = velocityY;}
 
     public Circle       getCircleHitbox(){return circleHitbox;};
 
     public Polygon      getPolygonHitbox() {return new Polygon(polygonHitbox.getTransformedVertices());}
 
-    public float getVelocityX(){return velocityX;}
-    public float getVelocityY(){return velocityY;}
+    public float        getVelocityX(){return velocityX;}
+    public float        getVelocityY(){return velocityY;}
 
-    public void			setWorld(World world){this.world = world;}
+    public void			setWorld(World world){ this.world = world; }
 
     public void			setPositionX(float x){ position.x = x;}
     public void			setPositionY(float y){ position.y = y;}

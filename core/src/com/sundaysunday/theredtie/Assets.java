@@ -21,4 +21,7 @@ public abstract class Assets
 
     //TILESET TEMPORARY
     public static final Texture tileset = new Texture(Gdx.files.internal("tileset.png"));
+
+    //DEMOLITION BALL
+    public static TextureRegion demolitionBall = new TextureRegion(new Texture(Gdx.files.internal("demolitionBall.png")));
 }

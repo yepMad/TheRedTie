@@ -1,8 +1,6 @@
 package com.sundaysunday.theredtie.Entities;
 
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.sundaysunday.theredtie.Assets;
@@ -10,27 +8,24 @@ import com.sundaysunday.theredtie.TheRedTie;
 
 import java.util.ArrayList;
 
-public class Barrel extends Entity
+public class DemolitionBall extends Entity
 {
     private float m_velocity = 53f;
     private float m_gravity = 10f;
     private float m_maxYVel = 100f;
 
     private float m_elapsed;
-    private Animation<TextureRegion> walkAnimation;
+    //private Animation<TextureRegion> walkAnimation;
 
-    public Barrel(float x, float y, boolean moveRight)
+    public DemolitionBall(float x, float y, boolean moveRight)
     {
-        super(new Vector2(x,y), new Circle(0,30,5), "barrel");
+        super(new Vector2(x,y), new Circle(0,30,6), "demolitionBall");
 
         if(moveRight) { velocityX = m_velocity; }
         else { velocityX = -m_velocity; }
 
         m_elapsed = 0;
-        walkAnimation = new Animation<TextureRegion>(1/5f, new TextureRegion(Assets.tileset,136,0,16,16),
-                new TextureRegion(Assets.tileset,152,0,16,16),
-                new TextureRegion(Assets.tileset,168,0,16,16),
-                new TextureRegion(Assets.tileset,184,0,16,16));
+        //walkAnimation = new Animation<TextureRegion>(new TextureRegion(Assets.demolitionBall,16,16));
     }
 
     @Override
@@ -38,6 +33,9 @@ public class Barrel extends Entity
     {
         super.Update(deltaTime);
         m_elapsed += deltaTime;
+
+        circleHitbox.setX(position.x);
+        circleHitbox.setY(position.y);
 
         velocityY -= m_gravity;
 
@@ -47,9 +45,9 @@ public class Barrel extends Entity
         ArrayList<Entity> listWall = world.getEntitiesByTag("solid");
         for(Entity wall : listWall)
         {
-            if(CollideWithInBetweenPolygonAndCircle(wall, this, velocityY, deltaTime))
+            if(CollideWithInBetweenPOLYGONandCIRCLE(wall, this, velocityY, deltaTime))
             {
-                while(CollideWithByNameTag("solid", this) == null)
+                while(CollideWithNameTagAndEntity("solid", this) == null)
                 {
                     position.y += Math.signum(velocityY);
                 }
@@ -72,7 +70,8 @@ public class Barrel extends Entity
     @Override
     public void Draw(Batch batch)
     {
-        batch.draw(walkAnimation.getKeyFrame(m_elapsed, true),position.x, position.y);
+        //batch.draw(walkAnimation.getKeyFrame(m_elapsed, true),position.x, position.y);
+        batch.draw(Assets.demolitionBall, position.x - 6, position.y - 6, 12, 12);
     }
 
 }
