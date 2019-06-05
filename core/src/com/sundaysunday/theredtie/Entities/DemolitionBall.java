@@ -45,7 +45,7 @@ public class DemolitionBall extends Entity
         ArrayList<Entity> listWall = world.getEntitiesByTag("solid");
         for(Entity wall : listWall)
         {
-            if(CollideWithInBetweenPOLYGONandCIRCLE(wall, this, velocityY, deltaTime))
+            if(CollideBetweenPOLYGONandCIRCLE(wall, this, velocityY, deltaTime))
             {
                 while(CollideWithNameTagAndEntity("solid", this) == null)
                 {

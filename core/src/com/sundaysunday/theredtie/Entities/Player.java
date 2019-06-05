@@ -133,7 +133,7 @@ public class Player extends Entity
 
         for(Entity wall : listWall)
         {
-            if(CollideWithInBetweenPOLYGONandCIRCLE(wall, this, velocityY, deltaTime))
+            if(CollideBetweenPOLYGONandCIRCLE(wall, this, velocityY, deltaTime))
             {
                 while(CollideWithNameTagAndEntity("solid", this) == null)
                 {
@@ -147,7 +147,7 @@ public class Player extends Entity
 
         for(Entity wall : listWall)
         {
-            if(CollideWithInBetweenPOLYGONandCIRCLE(wall, this, velocityY, deltaTime))
+            if(CollideBetweenPOLYGONandCIRCLE(wall, this, velocityY, deltaTime))
             {
                 if(position.x + circleHitbox.x + (circleHitbox.radius/2) > wall.getPositionX() && CollideWithNameTagAndEntity("solid", this) == null)
                 {

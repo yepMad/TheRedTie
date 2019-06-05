@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sundaysunday.theredtie.Worlds.Level;
 import com.sundaysunday.theredtie.Worlds.World;
+import com.sundaysunday.theredtie.Assets;
 
 public class TheRedTie extends ApplicationAdapter
 {
@@ -37,6 +38,9 @@ public class TheRedTie extends ApplicationAdapter
 		camera.update();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		batch.begin();
+		batch.draw(Assets.background, 0, 0,0, 0, WIDTH, HEIGHT,1,1,0);
+		batch.end();
 		batch.setProjectionMatrix(camera.combined);
 		world.Update(Gdx.graphics.getDeltaTime());
 		world.Draw(batch);

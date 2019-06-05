@@ -65,7 +65,7 @@ public class Entity
         renderer.end();
     }
 
-    public boolean CollideWithInBetweenPOLYGONandCIRCLE(Entity m_polygon, Entity m_circle)
+    public boolean CollideBetweenPOLYGONandCIRCLE(Entity m_polygon, Entity m_circle)
     {
         Polygon polygon = m_polygon.getPolygonHitbox();
         Circle circle = m_circle.getCircleHitbox();
@@ -96,7 +96,7 @@ public class Entity
         return false;
     }
 
-    public boolean CollideWithInBetweenPOLYGONandCIRCLE(Entity m_polygon, Entity m_circle, float velocityY, float deltaTime) {
+    public boolean CollideBetweenPOLYGONandCIRCLE(Entity m_polygon, Entity m_circle, float velocityY, float deltaTime) {
 
         Polygon polygon = m_polygon.getPolygonHitbox();
         Circle circle = m_circle.getCircleHitbox();
@@ -144,7 +144,7 @@ public class Entity
     {
         for(Entity entity : world.getEntitiesByTag(nameTag))
         {
-            if(CollideWithInBetweenPOLYGONandCIRCLE(entity, m_circle))
+            if(CollideBetweenPOLYGONandCIRCLE(entity, m_circle))
             {
                 return entity;
             }
