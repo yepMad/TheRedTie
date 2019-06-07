@@ -17,6 +17,10 @@ public abstract class Assets
     public static TextureRegion floor4at1 = new TextureRegion(new Texture(Gdx.files.internal("floor4at1.png")));
 
     public static TextureRegion background = new TextureRegion(new Texture(Gdx.files.internal("background.png")));
+    public static TextureRegion backgroundMenu = new TextureRegion(new Texture(Gdx.files.internal("background-menu.png")));
+    public static TextureRegion backgroundMenuWithoutLogo = new TextureRegion(new Texture(Gdx.files.internal("background-without-logo.png")));
+
+    public static TextureRegion creditsTextImage = new TextureRegion(new Texture(Gdx.files.internal("team.png")));
 
     //LADDER
     public static final Texture ladder = new Texture(Gdx.files.internal("ladder.png"));
