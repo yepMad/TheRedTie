@@ -15,36 +15,36 @@ public class TheRedTie extends ApplicationAdapter
 	public static final int HEIGHT = 324;
 	public static final int SCALE = 2;
 
-	static final int PLAY_BUTTON_WIDTH = 75;
-	static final int PLAY_BUTTON_HEIGHT = 19;
+	private static final int PLAY_BUTTON_WIDTH = 75;
+	private static final int PLAY_BUTTON_HEIGHT = 19;
 
-	static final int PLAY_BUTTON_X = ((WIDTH) * 2 - PLAY_BUTTON_WIDTH) / 2;
-	static final int PLAY_BUTTON_Y_OFFSET = 60;
-	static final int PLAY_BUTTON_Y = ((HEIGHT - PLAY_BUTTON_Y_OFFSET) * 2 - PLAY_BUTTON_HEIGHT) / 2;
+	private static final int PLAY_BUTTON_X = ((WIDTH) * 2 - PLAY_BUTTON_WIDTH) / 2;
+	private static final int PLAY_BUTTON_Y_OFFSET = 60;
+	private static final int PLAY_BUTTON_Y = ((HEIGHT - PLAY_BUTTON_Y_OFFSET) * 2 - PLAY_BUTTON_HEIGHT) / 2;
 
-	static final int CREDITS_BUTTON_WIDTH = 111;
-	static final int CREDITS_BUTTON_HEIGHT = 24;
+	private static final int CREDITS_BUTTON_WIDTH = 111;
+	private static final int CREDITS_BUTTON_HEIGHT = 24;
 
-	static final int CREDITS_BUTTON_X = ((WIDTH) * 2 - CREDITS_BUTTON_WIDTH) / 2;
-	static final int CREDITS_BUTTON_Y_OFFSET = 90;
-	static final int CREDITS_BUTTON_Y = ((HEIGHT - CREDITS_BUTTON_Y_OFFSET) * 2 - CREDITS_BUTTON_HEIGHT) / 2;
+	private static final int CREDITS_BUTTON_X = ((WIDTH) * 2 - CREDITS_BUTTON_WIDTH) / 2;
+	private static final int CREDITS_BUTTON_Y_OFFSET = 90;
+	private static final int CREDITS_BUTTON_Y = ((HEIGHT - CREDITS_BUTTON_Y_OFFSET) * 2 - CREDITS_BUTTON_HEIGHT) / 2;
 
-	static final int CREDITS_TEAM_X = ((WIDTH) * 2 - 143) / 2;
-	static final int CREDITS_TEAM_Y = ((HEIGHT - 147) * 2) / 2;
+	private static final int CREDITS_TEAM_X = ((WIDTH) * 2 - 143) / 2;
+	private static final int CREDITS_TEAM_Y = ((HEIGHT - 147) * 2) / 2;
 
-	static final int BACK_BUTTON_WIDTH = 67;
-	static final int BACK_BUTTON_HEIGHT = 13;
+	private static final int BACK_BUTTON_WIDTH = 67;
+	private static final int BACK_BUTTON_HEIGHT = 13;
 
-	static final int BACK_BUTTON_X = 115;
-	static final int BACK_BUTTON_Y = HEIGHT - 310;
+	private static final int BACK_BUTTON_X = 115;
+	private static final int BACK_BUTTON_Y = HEIGHT - 310;
 
 	private SpriteBatch batch;
 	private World world;
 	private OrthographicCamera camera;
 	private Texture playButtonNotActive, playButtonActive, creditsButtonNotActive, creditsButtonActive, backButtonNotActive, backButtonActive;
 
-	boolean isPlayButtonClicked = false;
-	boolean isCreditsScreenOpen = false;
+	private boolean isPlayButtonClicked = false;
+	private boolean isCreditsScreenOpen = false;
 
 	@Override
 	public void create ()
