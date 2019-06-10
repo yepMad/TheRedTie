@@ -15,7 +15,8 @@ public class World implements InputProcessor
     protected OrthographicCamera camera;
     private ShapeRenderer m_shapeRenderer;
     public boolean bShouldDrawHitbox = true;
-    public boolean resetFlag = false;
+    public boolean bResetFlag = false;
+    public boolean bPlayerWin = false;
 
     private ArrayList<Entity> listAddedEntities = new ArrayList<Entity>();
 
@@ -89,6 +90,17 @@ public class World implements InputProcessor
         listAddedEntities.clear();
     }
 
+    public void UpdatePlayerKeys(int W, int A, int S, int D)
+    {
+        for(Entity entity : listAddedEntities)
+        {
+            if(entity.getNameTag().equals("player"))
+            {
+                entity.UpdatePlayerInputs(W, A, S, D);
+            }
+        }
+    }
+
     public ArrayList<Entity> getEntitiesByTag(String nameTag)
     {
         ArrayList<Entity> listEntity = new ArrayList<Entity>();
@@ -102,14 +114,14 @@ public class World implements InputProcessor
         return listEntity;
     }
 
-    public boolean getResetFlag()
+    public boolean getbResetFlag()
     {
-        return resetFlag;
+        return bResetFlag;
     }
 
-    public void setResetFlag(boolean bReset)
+    public void setbResetFlag(boolean bReset)
     {
-        resetFlag = bReset;
+        bResetFlag = bReset;
     }
 
     @Override

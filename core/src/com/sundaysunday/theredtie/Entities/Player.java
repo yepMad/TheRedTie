@@ -26,31 +26,37 @@ public class Player extends Entity
     private Animation<TextureRegion> m_walkAnimation;
     private Animation<TextureRegion> m_climbingAnimation;
 
-    private TextureRegion textRegion_jumpingAnimation = new TextureRegion(Assets.tileset,24,0,16,16);
-    private TextureRegion textRegion_standing = new TextureRegion(Assets.tileset,8,0,16,16);
+    private TextureRegion textRegion_jumpingAnimation = Assets.spriteSalsicha;
+    private TextureRegion textRegion_standing = Assets.spriteSalsicha;
 
     private boolean bFlip;
     private boolean bRunning = false;
 
+    private boolean collideWithBlocker = false;
+
     public Player(float x, float y)
     {
-        super(new Vector2(0,30), new Circle(0,30,5), "player");
+        super(new Vector2(x,y), new Circle(x,y,5), "player");
 
         m_state = PlayerEnum.idle;
 
         m_xVelocity = 35;
-        m_jumpForce = 200;
+        m_jumpForce = 125;
         m_gravity = 10;
         m_maxVelY = 300;
 
         bFlip = true;
 
-        m_walkAnimation = new Animation<TextureRegion>(1/15f,new TextureRegion(Assets.tileset,24,0,16,16),
+        /*m_walkAnimation = new Animation<TextureRegion>(1/15f,new TextureRegion(Assets.tileset,24,0,16,16),
                 new TextureRegion(Assets.tileset,8,0,16,16),
                 new TextureRegion(Assets.tileset,40,0,16,16));
 
         m_climbingAnimation = new Animation<TextureRegion>(1/5f, new TextureRegion(Assets.tileset,56,0,16,16),
-                new TextureRegion(Assets.tileset,72,0,16,16));
+                new TextureRegion(Assets.tileset,72,0,16,16));*/
+
+        m_walkAnimation = new Animation<TextureRegion>(1/15f, Assets.spriteSalsicha);
+
+        m_climbingAnimation = new Animation<TextureRegion>(1/15f, Assets.spriteSalsicha);
     }
 
     @Override
@@ -76,12 +82,12 @@ public class Player extends Entity
 
         if(m_state == PlayerEnum.idle)
         {
-            if(Gdx.input.isKeyPressed(Keys.D))
+            if(Gdx.input.isKeyPressed(playerKeys[3]))
             {
                 xSum++;
                 bRunning = true;
             }
-            if(Gdx.input.isKeyPressed(Keys.A))
+            if(Gdx.input.isKeyPressed(playerKeys[1]))
             {
                 xSum--;
                 bRunning = true;
@@ -90,7 +96,7 @@ public class Player extends Entity
             {
                 Jump();
             }
-            if(!Gdx.input.isKeyPressed(Keys.D) && !Gdx.input.isKeyPressed(Keys.A))
+            if(!Gdx.input.isKeyPressed(playerKeys[3]) && !Gdx.input.isKeyPressed(playerKeys[1]))
             {
                 bRunning = false;
             }
@@ -99,7 +105,7 @@ public class Player extends Entity
 
             if(CollideWithNameTagAndEntity("ladder", this) != null)
             {
-                if(Gdx.input.isKeyJustPressed(Keys.W))
+                if(Gdx.input.isKeyJustPressed(playerKeys[0]))
                 {
                     m_state = PlayerEnum.climbing;
                 }
@@ -131,6 +137,15 @@ public class Player extends Entity
 
         ArrayList<Entity> listWall = world.getEntitiesByTag("solid");
 
+        if(CollideWithNameTagAndEntity("blockerRight", this) != null)
+        {
+            position.x += -0.7;
+        }
+        else if(CollideWithNameTagAndEntity("blockerLeft", this) != null)
+        {
+            position.x -= -0.7;
+        }
+
         for(Entity wall : listWall)
         {
             if(CollideBetweenPOLYGONandCIRCLE(wall, this, velocityY, deltaTime))
@@ -157,6 +172,7 @@ public class Player extends Entity
         }
 
         IfPlayerCollideWithBall();
+        IfPlayerCollideWithVillain();
         PreventsPlayerExitTheScreen();
     }
 
@@ -164,7 +180,15 @@ public class Player extends Entity
     {
         if(CollideWithDemolitionBallTagAndPlayerCircle("demolitionBall", this) != null)
         {
-            world.setResetFlag(true);
+            world.setbResetFlag(true);
+        }
+    }
+
+    private void IfPlayerCollideWithVillain()
+    {
+        if(CollideWithDemolitionBallTagAndPlayerCircle("villain", this) != null)
+        {
+            world.bPlayerWin = true;
         }
     }
 
@@ -182,11 +206,11 @@ public class Player extends Entity
 
     private int MoveX()
     {
-        if(Gdx.input.isKeyPressed(Keys.D))
+        if(Gdx.input.isKeyPressed(playerKeys[3]))
         {
             return 1;
         }
-        if(Gdx.input.isKeyPressed(Keys.A))
+        if(Gdx.input.isKeyPressed(playerKeys[1]))
         {
             return -1;
         }
@@ -195,11 +219,11 @@ public class Player extends Entity
 
     private int MoveY()
     {
-        if(Gdx.input.isKeyPressed(Keys.W))
+        if(Gdx.input.isKeyPressed(playerKeys[0]))
         {
             return 1;
         }
-        if(Gdx.input.isKeyPressed(Keys.S))
+        if(Gdx.input.isKeyPressed(playerKeys[2]))
         {
             return -1;
         }
@@ -248,13 +272,13 @@ public class Player extends Entity
     private void DrawPlayer(Batch batch, TextureRegion graphic)
     {
         batch.draw(graphic,
-                position.x-7,
-                position.y - 3,
-                8,
-                8,
-                16,
-                16,
-                bFlip ? -1 : 1,
+                position.x - 7,
+                position.y - 5,
+                7,
+                0,
+                22/2,
+                74/2,
+                bFlip ? 1 : -1,
                 1,
                 0);
     }
@@ -264,11 +288,11 @@ public class Player extends Entity
     {
         if(m_state == PlayerEnum.idle)
         {
-            if(keycode == Keys.D)
+            if(keycode == playerKeys[3])
             {
                 velocityX = 0;
             }
-            if(keycode == Keys.A)
+            if(keycode == playerKeys[1])
             {
                 velocityX = 0;
             }
@@ -280,11 +304,11 @@ public class Player extends Entity
     {
         if(m_state == PlayerEnum.idle)
         {
-            if(keycode == Keys.D)
+            if(keycode == playerKeys[3])
             {
                 velocityX = m_xVelocity;
             }
-            if(keycode == Keys.A)
+            if(keycode ==playerKeys[1])
             {
                 velocityX = -m_xVelocity;
             }

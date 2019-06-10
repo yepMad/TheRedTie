@@ -7,7 +7,7 @@ import com.sundaysunday.theredtie.Assets;
 
 public class Ladder extends Entity
 {
-    private static TextureRegion tile = new TextureRegion(Assets.ladder);
+    private static TextureRegion tile = new TextureRegion(/*Assets.ladder*/);
     public Ladder(int x, int y, int width, int height)
     {
         super(new Vector2(x,y), x, y, width, height,"ladder", 0);

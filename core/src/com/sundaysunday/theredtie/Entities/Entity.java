@@ -18,6 +18,8 @@ public class Entity
 
     private String m_nameTag;
 
+    public int[] playerKeys = new int[4];
+
     public Entity(Vector2 position, int x, int y, int width, int height, String m_nameTag, float rotation)
     {
         this.position = position;
@@ -53,7 +55,7 @@ public class Entity
         renderer.setColor(Color.GREEN);
         renderer.begin(ShapeRenderer.ShapeType.Line);
 
-        if(m_nameTag.equals("player") || m_nameTag.equals("demolitionBall"))
+        if(m_nameTag.equals("player") || m_nameTag.equals("demolitionBall") || m_nameTag.equals("villain"))
         {
             renderer.circle(position.x, position.y, circleHitbox.radius);
         }
@@ -164,6 +166,14 @@ public class Entity
         }
 
         return null;
+    }
+
+    public void UpdatePlayerInputs(int W, int A, int S, int D)
+    {
+        playerKeys[0] = W;
+        playerKeys[1] = A;
+        playerKeys[2] = S;
+        playerKeys[3] = D;
     }
 
     public void         Draw(Batch batch){}
