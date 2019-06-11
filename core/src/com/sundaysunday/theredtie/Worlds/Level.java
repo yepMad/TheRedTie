@@ -77,7 +77,7 @@ public class Level extends World
         AddEntity(demolitionBall);
 
         //PLAYER
-        Player player = new Player(10,30);
+        Player player = new Player(300,30);
         AddEntity(player);
 
         Villain villain = new Villain(20,300);
